@@ -1,0 +1,390 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E1013"><title>Hybrid Trainingsplan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}body{margin:0}
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface2:#F4F5F2; --line:#D7DBD3;
+  --fg:#15181A; --muted:#5F6763; --accent:#1F5FD1; --accent-ink:#FFFFFF;
+  --gym:#B7791F; --gym-bg:#FBF3E4; --ok:#2F8F4E; --ok-bg:#E5F3E9; --warn:#B4441B; --warn-bg:#FBEAE2;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1013; --surface:#171A1F; --surface2:#1F232A; --line:#2B3038;
+  --fg:#ECEEF0; --muted:#8C949E; --accent:#6A97F2; --accent-ink:#0B1020;
+  --gym:#E2A64A; --gym-bg:#2A2216; --ok:#56C27A; --ok-bg:#16281D; --warn:#EE8A62; --warn-bg:#2E1B14;
+  color-scheme:dark}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.45 var(--body);-webkit-tap-highlight-color:transparent}
+.wrap{max-width:640px;margin:0 auto;padding-inline:16px;padding-block:0 140px}
+header.top{padding-block:20px 6px}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 34px/1 var(--display);letter-spacing:.01em;margin:6px 0 0;text-wrap:balance}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding-block:12px}
+.tab{font:700 17px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 4px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab small{display:block;font:500 11px/1.2 var(--body);letter-spacing:0;text-transform:none;margin-top:3px;opacity:.85}
+.dayhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin:8px 0 10px}
+.dayhead h2{font:700 24px/1.1 var(--display);margin:0}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--body);padding:6px 9px;border-radius:999px;background:var(--surface2);color:var(--muted)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+details.info{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px}
+details.info summary{cursor:pointer;padding:12px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details.info summary::after{content:"+";color:var(--muted);font-weight:500}
+details.info[open] summary::after{content:"–"}
+details.info .inner{padding:0 14px 14px;color:var(--muted);font-size:15px}
+details.info ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.cards{display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:12px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.focus{font:600 11px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card h3{font:700 22px/1.1 var(--display);margin:3px 0 0}
+.badge{flex:none;font:700 12px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;border:1.5px solid currentColor}
+.badge.bw{color:var(--accent)}
+.badge.gym{color:var(--gym);background:var(--gym-bg)}
+.selwrap{position:relative}
+.selwrap::after{content:"";position:absolute;right:14px;top:50%;width:8px;height:8px;border-right:2px solid var(--fg);border-bottom:2px solid var(--fg);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+select{width:100%;appearance:none;-webkit-appearance:none;font:600 16px/1.2 var(--body);color:var(--fg);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:12px 38px 12px 12px}
+.target{display:flex;flex-wrap:wrap;gap:6px}
+.cues{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:grid;gap:2px}
+.last{font-size:14px;color:var(--muted)}
+.last b{color:var(--fg);font-weight:600}
+.hint{font-size:14px;padding:8px 10px;border-radius:8px;background:var(--ok-bg);color:var(--ok);font-weight:500}
+table.sets{width:100%;border-collapse:separate;border-spacing:0 6px;font-variant-numeric:tabular-nums}
+table.sets th{font:600 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding:0 2px 2px}
+table.sets th:first-child{text-align:left}
+table.sets td{padding:0 2px;vertical-align:middle}
+.setno{width:34px;height:44px;display:grid;place-items:center;border-radius:8px;background:var(--surface2);font:700 18px/1 var(--display)}
+tr.done .setno{background:var(--ok);color:var(--surface)}
+.stepper{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;align-items:center;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);overflow:hidden}
+.stepper button{height:100%;border:0;background:transparent;color:var(--fg);font:600 20px/1 var(--body);cursor:pointer}
+.stepper button:active{background:var(--line)}
+.stepper input{width:100%;min-width:0;height:100%;border:0;background:transparent;color:var(--fg);text-align:center;font:700 19px/1 var(--display);font-variant-numeric:tabular-nums}
+.stepper.kg{border-color:color-mix(in srgb,var(--gym) 45%,var(--line));background:var(--gym-bg)}
+tr.done .stepper{opacity:.75}
+.check{width:44px;height:44px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.check svg{width:20px;height:20px}
+tr.done .check{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.rowbtns{display:flex;gap:8px}
+.btn{font:600 15px/1 var(--body);padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface2);color:var(--fg);cursor:pointer}
+.btn.flex{flex:1}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font:700 18px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;padding:15px}
+.btn.danger{color:var(--warn)}
+.btn:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:10px;margin-top:14px}
+.section h3{font:700 20px/1 var(--display);margin:0}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{font:600 14px/1.2 var(--body);padding:10px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface2);color:var(--fg);cursor:pointer}
+.seg button[aria-pressed="true"].k0{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.seg button[aria-pressed="true"].k1{background:var(--gym-bg);border-color:var(--gym);color:var(--gym)}
+.seg button[aria-pressed="true"].k2{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+textarea{width:100%;font:15px/1.4 var(--body);color:var(--fg);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical}
+.msg{font-weight:600;color:var(--ok)}
+.msg.err{color:var(--warn)}
+.pick{display:grid;gap:6px}
+.pick label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);cursor:pointer}
+.pick input{width:20px;height:20px;accent-color:var(--accent)}
+.pick label.dim{opacity:.45}
+.hist{display:grid;gap:12px}
+.hcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:8px}
+.hcard .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.hcard h3{font:700 20px/1 var(--display);margin:0}
+.hcard ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:15px;font-variant-numeric:tabular-nums}
+.hcard li{display:flex;justify-content:space-between;gap:10px}
+.hcard li span:last-child{color:var(--muted);text-align:right}
+.empty{color:var(--muted);text-align:center;padding:30px 10px;border:1px dashed var(--line);border-radius:var(--r)}
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.timer .in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.timer .time{font:700 34px/1 var(--display);font-variant-numeric:tabular-nums;min-width:82px}
+.timer .lbl{font-size:12px;color:var(--muted);line-height:1.2}
+.timer .bar{position:absolute;left:0;top:-1px;height:3px;background:var(--accent);transition:width 1s linear}
+.timer.over .time{color:var(--ok)}
+.timer .sp{flex:1}
+.timer .btn{padding:10px 11px}
+@media (prefers-reduced-motion:reduce){.timer .bar{transition:none}}
+@media (max-width:380px){h1{font-size:29px}.timer .time{font-size:28px;min-width:66px}}
+</style></head><body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Push-up &amp; Klimmzug Aufbau · knieschonend</div>
+    <h1>Hybrid Trainingsplan</h1>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main id="view"></main>
+</div>
+<div class="timer" id="timer" hidden>
+  <div class="bar" id="tbar"></div>
+  <div class="in">
+    <div><div class="time" id="ttime">1:30</div></div>
+    <div class="lbl">Satzpause<br>60–90 s</div>
+    <div class="sp"></div>
+    <button class="btn" id="tminus" aria-label="15 Sekunden weniger">−15</button>
+    <button class="btn" id="tplus" aria-label="15 Sekunden mehr">+15</button>
+    <button class="btn" id="tstop">Weiter</button>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+const O=(key,name,type,level,sets,reps,hint,cues,unit)=>({key,name,type,level,sets,reps,hint,cues,unit:unit||"Wdh"});
+const SLOTS={
+  push1:{title:"Push-up Aufbau I",focus:"Schulter und Brust",opts:[
+    O("els_l","Erhöhte Liegestütze","bw","leicht",4,[8,12],"Hände auf hoher Bank",["Rumpf stabil halten","Brust zur Bank führen"]),
+    O("els_m","Erhöhte Liegestütze","bw","moderat",4,[6,10],"Niedrigere Bank",["Rumpf stabil halten","Brust zur Bank führen"]),
+    O("brustpresse","Brustpresse","gym","",4,[8,12],"",["Griffe auf Brusthöhe einstellen","Schulterblätter nach hinten-unten setzen","Schultern nach unten ziehen, kontrolliert drücken"])]},
+  push23:{title:"Push-up Aufbau II / III",focus:"Brust, Trizeps und Rumpf",opts:[
+    O("kls_l","Knie-Liegestütze","bw","leicht",4,[6,10],"Gleichmäßig auf den Knien",["Körper bleibt von Kopf bis Knie in einer Linie"]),
+    O("kls_m","Knie-Liegestütze","bw","moderat",4,[6,8],"3 Sekunden ablassen",["Körper bleibt von Kopf bis Knie in einer Linie"]),
+    O("kl_l","Kontrollierte Liegestütze","bw","leicht",4,[3,3],"3 Negative + Knievariante",["Abbruch, sobald die Hüfte durchhängt"]),
+    O("kl_m","Kontrollierte Liegestütze","bw","moderat",4,[4,8],"Volle Wiederholungen",["Abbruch, sobald die Hüfte durchhängt"]),
+    O("kh_bank","Kurzhantel Bankdrücken","gym","",4,[6,10],"",["Füße fest auf dem Boden, Schulterblätter zurück","Hanteln langsam und symmetrisch führen"]),
+    O("kabel_brust","Kabel Brustdrücken","gym","",4,[8,12],"3 bis 4 Sätze",["Stand stabil, Rumpf fest anspannen","Schulterblätter nach hinten-unten setzen","Griffe auf Brusthöhe nach vorn drücken"])]},
+  pull1:{title:"Klimmzug Aufbau I",focus:"Latissimus und Griffkraft",opts:[
+    O("bk_l","Bandassistierter Klimmzug","bw","leicht",4,[5,8],"Starkes Band",["Beide Füße ins Band, Beine gestreckt, Rumpf fest","Schulterblätter aktiv nach unten ziehen, nicht schwingen"]),
+    O("bk_m","Bandassistierter Klimmzug","bw","moderat",4,[4,6],"Dünneres Band",["Beide Füße ins Band, Beine gestreckt, Rumpf fest","Schulterblätter aktiv nach unten ziehen, nicht schwingen"]),
+    O("latziehen","Latziehen","gym","",4,[6,10],"",["Brust anheben, Stange zur oberen Brust ziehen","Gewicht so wählen, dass die Schultern nicht hochziehen"])]},
+  pull2:{title:"Klimmzug Aufbau II",focus:"Rudern und oberer Rücken",opts:[
+    O("ap_l","Australian Pull-up","bw","leicht",4,[8,12],"Stange höher oder Knie gebeugt",["Brust zur Stange ziehen","Körper als Linie halten"]),
+    O("ap_m","Australian Pull-up","bw","moderat",4,[6,10],"Stange tiefer, Beine lang",["Brust zur Stange ziehen","Körper als Linie halten"]),
+    O("kabelrudern","Kabelrudern","gym","",4,[8,12],"",["Griff zum unteren Rippenbogen ziehen","Schulterblätter bewusst nach hinten führen"])]},
+  hip1:{title:"Knie und Hüfte I",focus:"Gesäß und hintere Kette",opts:[
+    O("gb_l","Glute Bridge","bw","leicht",3,[10,15],"",["Druck über die Fersen","Knie bleiben ruhig"]),
+    O("gb_m","Glute Bridge","bw","moderat",3,[8,12],"Oben 2 Sekunden halten",["Druck über die Fersen","Knie bleiben ruhig"]),
+    O("hipthrust","Hip Thrust","gym","",3,[8,12],"3 bis 4 Sätze",["Bewegung über die Hüfte, Rippen unten halten","Gewicht nur steigern, wenn das Knie ruhig bleibt"])]},
+  hip2:{title:"Knie und Hüfte II",focus:"Beinachse und Quadrizeps",opts:[
+    O("ak_l","Aufstehen vom hohen Kasten","bw","leicht",3,[8,10],"Hoher Kasten",["Knie folgt dem zweiten Zeh","Nur schmerzfrei beugen"]),
+    O("ak_m","Aufstehen vom Kasten","bw","moderat",3,[6,10],"Kasten schrittweise niedriger",["Knie folgt dem zweiten Zeh","Nur schmerzfrei beugen"]),
+    O("beinpresse","Beinpresse","gym","",3,[8,12],"Nur im angenehmen Bereich",["Bewegungsweg an der Kniescheibe ausrichten","Keine tiefere Kniebeugung erzwingen"])]},
+  hip3:{title:"Knie und Hüfte III",focus:"Seitliche Hüfte und Stabilität",opts:[
+    O("lbw_l","Lateral Band Walk","bw","leicht",3,[10,10],"Band oberhalb der Knie",["Becken waagerecht halten","Kleine, kontrollierte Schritte"],"Schritte/Seite"),
+    O("lbw_m","Lateral Band Walk","bw","moderat",3,[10,10],"Band an den Knöcheln",["Becken waagerecht halten","Kleine, kontrollierte Schritte"],"Schritte/Seite"),
+    O("abduktion","Hüft-Abduktionsmaschine","gym","",3,[10,15],"",["Bewegung aus der Hüfte führen","Nicht ins Hohlkreuz ausweichen"])]}
+};
+const DAYS={
+  A:{name:"Tag A",sub:"Push + vertikaler Zug",slots:["push1","pull1","hip1","hip3"]},
+  B:{name:"Tag B",sub:"Push + Rudern",slots:["push23","pull2","hip2","hip3"]},
+  C:{name:"Tag C",sub:"Optional · 2 Paare leicht",slots:null}
+};
+const C_CHOICES=["push1","push23","pull1","pull2","hip1","hip2","hip3"];
+const OPT_BY_KEY={};for(const s in SLOTS)for(const o of SLOTS[s].opts)OPT_BY_KEY[o.key]=o;
+const K={draft:"tp1.draft",hist:"tp1.hist",tab:"tp1.tab",rest:"tp1.rest"};
+function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let hist=load(K.hist,[]);
+let draft=load(K.draft,{});
+let tab=load(K.tab,"A");
+let restLen=load(K.rest,90);
+let saveT=null;
+function saveDraftSoon(){clearTimeout(saveT);saveT=setTimeout(()=>save(K.draft,draft),300)}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtKg=n=>(Math.round(n*100)/100).toLocaleString("de-DE");
+const parseNum=v=>{const n=parseFloat(String(v).replace(",","."));return isFinite(n)?n:null};
+const fmtDate=t=>new Date(t).toLocaleDateString("de-DE",{weekday:"short",day:"2-digit",month:"2-digit"});
+const optLabel=o=>o.type==="gym"?o.name+" · Gym":o.name+" · "+o.level;
+function lastFor(key){for(let i=hist.length-1;i>=0;i--){const e=hist[i].entries.find(x=>x.key===key);if(e)return{date:hist[i].date,e}}return null}
+function defaultSets(opt,isC){
+  const n=isC?Math.min(3,opt.sets):opt.sets;
+  const last=lastFor(opt.key);
+  const out=[];
+  for(let i=0;i<n;i++){
+    const ls=last&&last.e.sets[Math.min(i,last.e.sets.length-1)];
+    out.push({reps:ls?ls.reps:opt.reps[0],kg:opt.type==="gym"?(ls&&ls.kg!=null?ls.kg:""):null,done:false});
+  }
+  return out;
+}
+function dayState(d){
+  if(!draft[d])draft[d]={slots:{},knee:null,note:"",picked:[]};
+  const st=draft[d];
+  const ids=d==="C"?st.picked:DAYS[d].slots;
+  for(const id of ids){
+    if(!st.slots[id]){
+      const opts=SLOTS[id].opts;
+      const prev=d==="C"?opts[0]:(()=>{for(let i=hist.length-1;i>=0;i--){const e=hist[i].entries.find(x=>x.slot===id&&hist[i].day===d);if(e&&OPT_BY_KEY[e.key])return OPT_BY_KEY[e.key]}return opts[0]})();
+      st.slots[id]={opt:prev.key,sets:defaultSets(prev,d==="C")};
+    }
+  }
+  return st;
+}
+function sinceLast(){if(!hist.length)return null;return(Date.now()-hist[hist.length-1].date)/36e5}
+const $view=document.getElementById("view"),$tabs=document.getElementById("tabs");
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function renderTabs(){
+  const items=[["A","Tag A","Push · Zug"],["B","Tag B","Push · Rudern"],["C","Tag C","optional"],["H","Verlauf",hist.length+" Einh."]];
+  $tabs.innerHTML=items.map(([k,n,s])=>`<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab===k}">${n}<small>${s}</small></button>`).join("");
+}
+function renderCard(d,id,st){
+  const slot=SLOTS[id],s=st.slots[id],opt=OPT_BY_KEY[s.opt]||slot.opts[0],gym=opt.type==="gym";
+  const last=lastFor(opt.key);
+  let lastHtml="",hint="";
+  if(last){
+    const e=last.e,reps=e.sets.map(x=>x.reps).join("/");
+    const kgs=gym?e.sets.map(x=>x.kg).filter(x=>x!=null&&x!==""):[];
+    const kg=kgs.length?" · "+fmtKg(Math.max(...kgs))+" kg":"";
+    lastHtml=`<div class="last">Zuletzt ${fmtDate(last.date)}: <b>${e.sets.length} × ${reps}${kg}</b></div>`;
+    if(e.sets.length>=opt.sets&&e.sets.every(x=>x.reps>=opt.reps[1])&&e.knee!=="schmerz"){
+      hint=`<div class="hint">Obergrenze von ${opt.reps[1]} ${opt.unit} erreicht. ${gym?"Heute kleinen Gewichtsschritt testen, z.&nbsp;B. +2,5 kg.":(opt.level==="leicht"?"Bereit für die moderate Variante.":"Wiederholungen oder Bewegungsweg langsam steigern.")}</div>`;
+    }
+  }
+  const range=opt.reps[0]===opt.reps[1]?opt.reps[0]:opt.reps[0]+"–"+opt.reps[1];
+  const options=slot.opts.map(o=>`<option value="${o.key}"${o.key===opt.key?" selected":""}>${esc(optLabel(o))}</option>`).join("");
+  const rows=s.sets.map((x,i)=>`<tr class="${x.done?"done":""}" data-i="${i}">
+      <td><div class="setno">${i+1}</div></td>
+      ${gym?`<td><div class="stepper kg"><button data-act="kg-" aria-label="Gewicht verringern">−</button><input id="${d}-${id}-kg-${i}" data-f="kg" inputmode="decimal" placeholder="–" value="${x.kg===""||x.kg==null?"":fmtKg(x.kg)}" aria-label="Kilogramm Satz ${i+1}"><button data-act="kg+" aria-label="Gewicht erhöhen">+</button></div></td>`:""}
+      <td><div class="stepper"><button data-act="r-" aria-label="Weniger">−</button><input id="${d}-${id}-r-${i}" data-f="reps" inputmode="numeric" value="${x.reps}" aria-label="${opt.unit} Satz ${i+1}"><button data-act="r+" aria-label="Mehr">+</button></div></td>
+      <td><button class="check" data-act="done" aria-pressed="${x.done}" aria-label="Satz ${i+1} erledigt">${CHECK}</button></td>
+    </tr>`).join("");
+  return `<article class="card" data-slot="${id}">
+    <div class="card-top"><div><div class="focus">${esc(slot.focus)}</div><h3>${esc(slot.title)}</h3></div>
+      <span class="badge ${gym?"gym":"bw"}">${gym?"Gym · kg":"Körper"}</span></div>
+    <div class="selwrap"><select id="${d}-${id}-opt" data-act="opt" aria-label="Variante wählen">${options}</select></div>
+    <div class="target"><span class="chip">Ziel ${s.sets.length} × ${range} ${esc(opt.unit)}</span>${opt.hint?`<span class="chip">${esc(opt.hint)}</span>`:""}<span class="chip">Pause 60–90 s</span></div>
+    <ul class="cues">${opt.cues.map(c=>`<li>${esc(c)}</li>`).join("")}</ul>
+    ${lastHtml}${hint}
+    <table class="sets"><thead><tr><th>Satz</th>${gym?"<th>kg</th>":""}<th>${esc(opt.unit)}</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="rowbtns"><button class="btn flex" data-act="add">+ Satz hinzufügen</button><button class="btn" data-act="rem"${s.sets.length<=1?" disabled":""} aria-label="Letzten Satz entfernen">− Satz</button></div>
+  </article>`;
+}
+function renderDay(d){
+  const st=dayState(d),def=DAYS[d];
+  const h=sinceLast();
+  let chip="";
+  if(h!=null)chip=h<48?`<span class="chip warn">Letzte Einheit vor ${Math.max(1,Math.round(h))} h · 48 h Pause einplanen</span>`:`<span class="chip ok">Erholt · letzte Einheit vor ${Math.round(h/24)} Tagen</span>`;
+  let pick="";
+  if(d==="C"){
+    pick=`<div class="section"><h3>Zwei technisch schwächste Paare wählen</h3>
+      <div class="last">Leichte Variante, 2 bis 3 Sätze.</div>
+      <div class="pick">${C_CHOICES.map(id=>{const on=st.picked.includes(id),dim=!on&&st.picked.length>=2;return `<label class="${dim?"dim":""}"><input type="checkbox" id="C-pick-${id}" data-act="pick" data-id="${id}"${on?" checked":""}${dim?" disabled":""}>${esc(SLOTS[id].title)}</label>`}).join("")}</div></div>`;
+  }
+  const ids=d==="C"?st.picked:def.slots;
+  const knees=[["ruhig","Knie ruhig"],["leicht","Leicht gereizt"],["schmerz","Schmerz nimmt zu"]];
+  $view.innerHTML=`
+    <div class="dayhead"><h2>${def.name} · ${def.sub}</h2>${chip}</div>
+    <details class="info"><summary>Aufwärmen · 5–8 Min.</summary><div class="inner"><ul>
+      <li>5–8 Minuten lockeres Fahrrad oder Crosstrainer</li>
+      <li>Je 10 Wdh.: Armkreisen, Cat-Cow, Glute Bridge</li>
+      <li>Vor Zugübungen 2 lockere Sätze Schulterblattziehen oder Bandzug</li></ul></div></details>
+    <details class="info"><summary>Knie-Regel &amp; Progression</summary><div class="inner"><ul>
+      <li>Nur trainieren, wenn die Kniescheibe medizinisch oder physiotherapeutisch für Belastung freigegeben ist.</li>
+      <li>Nur im angenehmen Bewegungsbereich arbeiten; bei zunehmenden Symptomen reduzieren.</li>
+      <li>Bleibt die Bewegung ruhig und der Schmerz gering: Wiederholungen, Bewegungsweg oder Bandstärke langsam steigern.</li>
+      <li>Bei Schwellung, Instabilität oder deutlich zunehmendem Schmerz: Übung stoppen und abklären lassen.</li>
+      <li>Leichte Varianten für Technik und Volumen, moderate Varianten für gezielten Kraftaufbau. Qualität vor Tempo.</li></ul></div></details>
+    ${pick}
+    <div class="cards">${ids.map(id=>renderCard(d,id,st)).join("")}</div>
+    ${d==="C"&&!ids.length?'<div class="empty">Wähle oben zwei Übungspaare aus.</div>':""}
+    <div class="section"><h3>Cool-down &amp; Rückblick</h3>
+      <div class="last">3–5 Min. ruhig gehen oder Rad fahren. Brust, Latissimus, Hüfte und Wade je 20–30 s schmerzfrei bewegen.</div>
+      <div class="seg" role="group" aria-label="Wie war das Knie?">${knees.map(([k,l],i)=>`<button class="k${i}" data-act="knee" data-k="${k}" aria-pressed="${st.knee===k}">${l}</button>`).join("")}</div>
+      <textarea id="${d}-note" data-act="note" rows="2" placeholder="Notiz: welche Variante lief gut?">${esc(st.note||"")}</textarea>
+      <button class="btn primary" data-act="finish"${ids.length?"":" disabled"}>Training speichern</button>
+      <div id="finishmsg" class="msg" role="status"></div>
+    </div>`;
+}
+function renderHist(){
+  const list=hist.slice().reverse();
+  $view.innerHTML=`<div class="dayhead"><h2>Verlauf</h2><span class="chip">${hist.length} ${hist.length===1?"Einheit":"Einheiten"}</span></div>
+    <div class="hist">${list.length?list.map(h=>{
+      const kn={ruhig:'<span class="chip ok">Knie ruhig</span>',leicht:'<span class="chip">Leicht gereizt</span>',schmerz:'<span class="chip warn">Schmerz nahm zu</span>'}[h.knee]||"";
+      return `<section class="hcard"><div class="row"><h3>${DAYS[h.day]?DAYS[h.day].name:h.day} · ${fmtDate(h.date)}</h3>${kn}</div>
+      <ul>${h.entries.map(e=>{const kgs=e.sets.map(x=>x.kg).filter(x=>x!=null&&x!=="");return `<li><span>${esc(e.name)}</span><span>${e.sets.length} × ${e.sets.map(x=>x.reps).join("/")}${kgs.length?" · "+fmtKg(Math.max(...kgs))+" kg":""}</span></li>`}).join("")}</ul>
+      ${h.note?`<div class="last">${esc(h.note)}</div>`:""}
+      <div><button class="btn danger" data-act="del" data-id="${h.id}">Eintrag löschen</button></div></section>`}).join(""):'<div class="empty">Noch keine Einheit gespeichert. Hake die Sätze im Tag A oder B ab und tippe auf „Training speichern“.</div>'}</div>
+    <div class="section"><h3>Sicherung</h3>
+      <div class="last">Die Daten liegen nur auf diesem Gerät im Browser. Kopiere sie ab und zu als Sicherung, oder übertrage sie so auf ein anderes Handy.</div>
+      <div class="rowbtns"><button class="btn flex" data-act="export">Daten kopieren</button><button class="btn flex" data-act="import">Daten einfügen</button></div>
+      <textarea id="backup" rows="3" placeholder="Hier Sicherung einfügen und auf „Daten einfügen“ tippen"></textarea>
+      <div class="seg" style="grid-template-columns:repeat(3,1fr)">${[60,75,90].map(n=>`<button data-act="rest" data-n="${n}" aria-pressed="${restLen===n}" class="k0">Pause ${n} s</button>`).join("")}</div>
+      <div id="bmsg" class="msg" role="status"></div>
+    </div>`;
+}
+function render(){renderTabs();if(tab==="H")renderHist();else renderDay(tab)}
+const $t=document.getElementById("timer"),$tt=document.getElementById("ttime"),$tb=document.getElementById("tbar");
+let tEnd=0,tTot=0,tInt=null,buzzed=false,wake=null;
+function tick(){
+  const left=Math.round((tEnd-Date.now())/1000);
+  const a=Math.abs(left);
+  $tt.textContent=(left<0?"+":"")+Math.floor(a/60)+":"+String(a%60).padStart(2,"0");
+  $tb.style.width=Math.max(0,Math.min(100,(1-left/tTot)*100))+"%";
+  $t.classList.toggle("over",left<=0);
+  if(left<=0&&!buzzed){buzzed=true;try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}
+}
+function startTimer(){
+  tTot=restLen;tEnd=Date.now()+restLen*1000;buzzed=false;$t.hidden=false;tick();clearInterval(tInt);tInt=setInterval(tick,500);
+  try{if(navigator.wakeLock&&!wake)navigator.wakeLock.request("screen").then(w=>{wake=w;w.addEventListener("release",()=>wake=null)}).catch(()=>{})}catch(e){}
+}
+function stopTimer(){clearInterval(tInt);$t.hidden=true}
+document.getElementById("tminus").onclick=()=>{tEnd-=15000;tTot=Math.max(15,tTot-15);tick()};
+document.getElementById("tplus").onclick=()=>{tEnd+=15000;tTot+=15;tick()};
+document.getElementById("tstop").onclick=stopTimer;
+$tabs.addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;tab=b.dataset.tab;save(K.tab,tab);render();window.scrollTo(0,0)});
+function ctx(el){
+  const card=el.closest(".card");if(!card)return null;
+  const st=draft[tab],id=card.dataset.slot,s=st.slots[id];
+  const tr=el.closest("tr");const i=tr?+tr.dataset.i:-1;
+  return{st,id,s,i,opt:OPT_BY_KEY[s.opt],tr};
+}
+let delArm=null;
+$view.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT"||b.tagName==="TEXTAREA"||b.dataset.act==="pick")return;
+  const act=b.dataset.act;
+  if(act==="kg-"||act==="kg+"||act==="r-"||act==="r+"){
+    const c=ctx(b),x=c.s.sets[c.i];
+    if(act[0]==="k"){const cur=parseNum(x.kg)||0;x.kg=Math.max(0,cur+(act==="kg+"?2.5:-2.5));c.tr.querySelector('[data-f="kg"]').value=fmtKg(x.kg)}
+    else{x.reps=Math.max(0,(x.reps|0)+(act==="r+"?1:-1));c.tr.querySelector('[data-f="reps"]').value=x.reps}
+    saveDraftSoon();return;
+  }
+  if(act==="done"){const c=ctx(b),x=c.s.sets[c.i];x.done=!x.done;c.tr.classList.toggle("done",x.done);b.setAttribute("aria-pressed",x.done);saveDraftSoon();if(x.done)startTimer();return}
+  if(act==="add"){const c=ctx(b),l=c.s.sets[c.s.sets.length-1];c.s.sets.push({reps:l?l.reps:c.opt.reps[0],kg:l?l.kg:(c.opt.type==="gym"?"":null),done:false});saveDraftSoon();render();return}
+  if(act==="rem"){const c=ctx(b);if(c.s.sets.length>1)c.s.sets.pop();saveDraftSoon();render();return}
+  if(act==="knee"){const st=draft[tab];st.knee=st.knee===b.dataset.k?null:b.dataset.k;saveDraftSoon();b.parentNode.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b&&st.knee===b.dataset.k));return}
+  if(act==="finish"){finish();return}
+  if(act==="del"){
+    if(delArm!==b.dataset.id){delArm=b.dataset.id;b.textContent="Wirklich löschen?";return}
+    hist=hist.filter(h=>h.id!==b.dataset.id);save(K.hist,hist);delArm=null;render();return}
+  if(act==="export"){
+    const txt=JSON.stringify({v:1,hist});const ta=document.getElementById("backup");ta.value=txt;
+    const m=document.getElementById("bmsg");
+    try{navigator.clipboard.writeText(txt).then(()=>{m.className="msg";m.textContent="Kopiert. Füge es z. B. in eine Notiz ein."}).catch(()=>{ta.select();m.className="msg";m.textContent="Text ist markiert. Jetzt kopieren."})}catch(err){ta.select();m.textContent="Text ist markiert. Jetzt kopieren."}
+    return}
+  if(act==="import"){
+    const m=document.getElementById("bmsg");
+    try{const d=JSON.parse(document.getElementById("backup").value);if(!d||!Array.isArray(d.hist))throw 0;
+      const ids=new Set(hist.map(h=>h.id));let n=0;for(const h of d.hist)if(h&&h.id&&!ids.has(h.id)){hist.push(h);n++}
+      hist.sort((a,b)=>a.date-b.date);save(K.hist,hist);render();const m2=document.getElementById("bmsg");m2.className="msg";m2.textContent=n+" Einheiten übernommen.";
+    }catch(err){m.className="msg err";m.textContent="Das ist keine gültige Sicherung. Bitte den kompletten kopierten Text einfügen."}
+    return}
+  if(act==="rest"){restLen=+b.dataset.n;save(K.rest,restLen);render();return}
+});
+$view.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.act==="opt"){const c=ctx(el),o=OPT_BY_KEY[el.value];c.s.opt=o.key;c.s.sets=defaultSets(o,tab==="C");saveDraftSoon();render();return}
+  if(el.dataset.act==="pick"){const st=draft.C,id=el.dataset.id;
+    if(el.checked){if(st.picked.length<2)st.picked.push(id)}else{st.picked=st.picked.filter(x=>x!==id);delete st.slots[id]}
+    saveDraftSoon();render();return}
+  if(el.dataset.f==="kg"){const c=ctx(el),n=parseNum(el.value);c.s.sets[c.i].kg=n==null?"":Math.max(0,n);el.value=n==null?"":fmtKg(c.s.sets[c.i].kg);saveDraftSoon()}
+  if(el.dataset.f==="reps"){const c=ctx(el),n=parseInt(el.value,10);c.s.sets[c.i].reps=isFinite(n)?Math.max(0,n):0;el.value=c.s.sets[c.i].reps;saveDraftSoon()}
+});
+$view.addEventListener("input",e=>{if(e.target.dataset.act==="note"){draft[tab].note=e.target.value;saveDraftSoon()}});
+$view.addEventListener("focusin",e=>{if(e.target.matches(".stepper input"))setTimeout(()=>{try{e.target.select()}catch(x){}},0)});
+function finish(){
+  const st=draft[tab],ids=tab==="C"?st.picked:DAYS[tab].slots,m=document.getElementById("finishmsg");
+  const entries=[];
+  for(const id of ids){const s=st.slots[id],o=OPT_BY_KEY[s.opt];const done=s.sets.filter(x=>x.done);
+    if(done.length)entries.push({slot:id,key:o.key,name:o.type==="gym"?o.name:o.name+" ("+o.level+")",type:o.type,knee:st.knee,sets:done.map(x=>({reps:x.reps,kg:o.type==="gym"?(x.kg===""?null:x.kg):null}))})}
+  if(!entries.length){m.className="msg err";m.textContent="Hake mindestens einen Satz ab, bevor du speicherst.";return}
+  hist.push({id:Date.now().toString(36),date:Date.now(),day:tab,knee:st.knee,note:(st.note||"").trim(),entries});
+  save(K.hist,hist);
+  const keep=tab==="C"?st.picked.slice():[];
+  draft[tab]={slots:{},knee:null,note:"",picked:keep};
+  for(const id of ids){const prevKey=st.slots[id].opt;draft[tab].slots[id]={opt:prevKey,sets:defaultSets(OPT_BY_KEY[prevKey],tab==="C")}}
+  save(K.draft,draft);stopTimer();render();
+  const m2=document.getElementById("finishmsg");m2.className="msg";m2.textContent="Gespeichert. Gute Einheit! Die Werte stehen jetzt im Verlauf und als Vorgabe fürs nächste Mal.";
+}
+render();
+})();
+</script>
+</body></html>
